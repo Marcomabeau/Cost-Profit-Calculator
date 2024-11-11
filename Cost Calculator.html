@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wagyu Menu Cost Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 8px;
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: っっっmmくぇええええ	くぇええええ	ウェエエええ	10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Wagyu Menu Cost Calculator</h1>
+
+    <label for="pricePerKg">ราคาซื้อเนื้อวากิวต่อกิโลกรัม (บาท):</label>
+    <input type="number" id="pricePerKg" value="1400">
+
+    <label for="portionSize">ปริมาณเนื้อในหนึ่งเมนู (กรัม):</label>
+    <input type="number" id="portionSize" value="130">
+
+    <label for="fatLoss">เปอร์เซ็นต์การสูญเสียจากไขมัน (%):</label>
+    <input type="number" id="fatLoss" value="10">
+
+    <button onclick="calculateCost()">คำนวณต้นทุน</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function calculateCost() {
+            // รับค่าจากผู้ใช้
+            const pricePerKg = parseFloat(document.getElementById('pricePerKg').value);
+            const portionSize = parseFloat(document.getElementById('portionSize').value);
+            const fatLoss = parseFloat(document.getElementById('fatLoss').value);
+
+            // คำนวณปริมาณเนื้อหลังหักสูญเสีย
+            const adjustedPortionSize = portionSize * (1 - fatLoss / 100);
+
+            // คำนวณต้นทุนเนื้อสำหรับหนึ่งเมนู
+            const costPerGram = pricePerKg / 1000;
+            const costForPortion = adjustedPortionSize * costPerGram;
+
+            // แสดงผลลัพธ์
+            document.getElementById('result').innerHTML = `ต้นทุนสำหรับเมนูนี้: ${costForPortion.toFixed(2)} บาท`;
+        }
+    </script>
+
+</body>
+</html>
