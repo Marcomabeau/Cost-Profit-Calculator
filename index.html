@@ -1,72 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wagyu Menu Cost Calculator</title>
+    <title>เครื่องคำนวณต้นทุนและราคาขาย Tohkai Group</title>
     <style>
+        /* สไตล์สำหรับหน้าเพจ */
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        label {
-            display: block;
-            margin-bottom: 10px;
+
+        /* กล่องฟอร์ม */
+        .calculator-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
         }
-        input {
-            padding: 8px;
-            width: 200px;
+
+        /* หัวเรื่อง */
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
             margin-bottom: 20px;
         }
-        button {
-            padding: っっっmmくぇええええ	くぇええええ	ウェエエええ	10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
+
+        /* ช่องฟอร์ม */
+        label {
+            font-size: 14px;
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
         }
-        .result {
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        /* ปุ่มคำนวณ */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* ผลลัพธ์ */
+        h2 {
+            font-size: 18px;
+            color: #333;
+            text-align: center;
             margin-top: 20px;
-            font-size: 1.2em;
-            font-weight: bold;
+        }
+
+        p#result {
+            font-size: 16px;
+            color: #666;
+            text-align: center;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
+    <div class="calculator-container">
+        <h1>เครื่องคำนวณต้นทุนและราคาขาย Tohkai Group</h1>
 
-    <h1>Wagyu Menu Cost Calculator</h1>
+        <form id="costCalculator">
+            <label for="portionWeight">น้ำหนักต่อหนึ่งเสิร์ฟ (กรัม):</label>
+            <input type="number" id="portionWeight" name="portionWeight" required>
 
-    <label for="pricePerKg">ราคาซื้อเนื้อวากิวต่อกิโลกรัม (บาท):</label>
-    <input type="number" id="pricePerKg" value="1400">
+            <label for="pricePerKg">ราคาวัตถุดิบต่อ 1 กิโลกรัม (บาท):</label>
+            <input type="number" id="pricePerKg" name="pricePerKg" required>
 
-    <label for="portionSize">ปริมาณเนื้อในหนึ่งเมนู (กรัม):</label>
-    <input type="number" id="portionSize" value="130">
+            <label for="usablePercentage">เปอร์เซ็นต์ที่สามารถใช้ได้จริง (%):</label>
+            <input type="number" id="usablePercentage" name="usablePercentage" value="100" required>
 
-    <label for="fatLoss">เปอร์เซ็นต์การสูญเสียจากไขมัน (%):</label>
-    <input type="number" id="fatLoss" value="10">
+            <label for="profitMargin">เปอร์เซ็นต์กำไรที่ต้องการ (%):</label>
+            <input type="number" id="profitMargin" name="profitMargin" value="300" required>
 
-    <button onclick="calculateCost()">คำนวณต้นทุน</button>
+            <button type="button" onclick="calculateCost()">คำนวณ</button>
+        </form>
 
-    <div class="result" id="result"></div>
+        <h2>ผลลัพธ์</h2>
+        <p id="result"></p>
+    </div>
 
     <script>
         function calculateCost() {
-            // รับค่าจากผู้ใช้
+            // ดึงข้อมูลจากฟอร์ม
+            const portionWeight = parseFloat(document.getElementById('portionWeight').value);
             const pricePerKg = parseFloat(document.getElementById('pricePerKg').value);
-            const portionSize = parseFloat(document.getElementById('portionSize').value);
-            const fatLoss = parseFloat(document.getElementById('fatLoss').value);
+            const usablePercentage = parseFloat(document.getElementById('usablePercentage').value) / 100;
+            const profitMargin = parseFloat(document.getElementById('profitMargin').value) / 100;
 
-            // คำนวณปริมาณเนื้อหลังหักสูญเสีย
-            const adjustedPortionSize = portionSize * (1 - fatLoss / 100);
+            // ตรวจสอบข้อมูลที่กรอกว่าถูกต้อง
+            if (isNaN(portionWeight) || isNaN(pricePerKg) || isNaN(usablePercentage) || isNaN(profitMargin)) {
+                document.getElementById('result').textContent = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+                return;
+            }
 
-            // คำนวณต้นทุนเนื้อสำหรับหนึ่งเมนู
-            const costPerGram = pricePerKg / 1000;
-            const costForPortion = adjustedPortionSize * costPerGram;
+            // คำนวณต้นทุนต่อกรัม
+            const costPerGram = (pricePerKg / 1000) / usablePercentage;
+            // คำนวณต้นทุนต่อเสิร์ฟ
+            const costPerPortion = costPerGram * portionWeight;
+            // คำนวณราคาขายตามเปอร์เซ็นต์กำไรที่ต้องการ
+            const sellingPrice = costPerPortion * (1 + profitMargin);
 
             // แสดงผลลัพธ์
-            document.getElementById('result').innerHTML = `ต้นทุนสำหรับเมนูนี้: ${costForPortion.toFixed(2)} บาท`;
+            document.getElementById('result').innerHTML = `
+                ต้นทุนต่อเสิร์ฟ: ${costPerPortion.toFixed(2)} บาท<br>
+                ราคาขายที่แนะนำ: ${sellingPrice.toFixed(2)} บาท
+            `;
         }
     </script>
-
 </body>
 </html>
